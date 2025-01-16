@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Example route
 router.post('/structure', DirControllerInstance.getDirStructure);
-
+router.post('/summary', DirControllerInstance.getTextSummary);
 
 
 export default router;
