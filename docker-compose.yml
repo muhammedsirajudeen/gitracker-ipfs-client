@@ -10,13 +10,9 @@ services:
     ports:
       - "4000:4000"
     command: npm run dev  # This will start the app in development mode using nodemon
+    networks:
+      - gitwrapper_elk
 
-  # Production Service
-  # app-prod:
-  #   build:
-  #     context: .
-  #   ports:
-  #     - "3000:3000"
-  #   environment:
-  #     - NODE_ENV=production
-  #   command: npm start  # Run the compiled JavaScript in production mode
+networks:
+  gitwrapper_elk:
+    external: true
