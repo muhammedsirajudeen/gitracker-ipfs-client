@@ -45,10 +45,6 @@ class DirController implements IDirController{
                 }
               });
             const tree = treeResponse.data.tree as GitTreeItem[];
-            //in here we have the dir structure now just process it and send it back also look at a way to extract the text content
-            // const files=tree.map((item)=>{
-            //     return item.path
-            // })
             if (response.status === HttpStatus.OK ) {
                 res.status(HttpStatus.OK).json({message:HttpStatusMessage[HttpStatus.OK],paths:tree??[]})
             } else {
