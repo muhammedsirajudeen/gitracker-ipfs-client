@@ -14,6 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const HttpStatus_1 = require("@/lib/HttpStatus");
 const IpfsService_1 = __importDefault(require("@/service/IpfsService"));
+const dotenv_1 = require("dotenv");
+(0, dotenv_1.configDotenv)();
+// src/controller/IpfsController.ts
+const cloudinary_1 = require("cloudinary");
+const fs_1 = require("fs");
+const path_1 = __importDefault(require("path"));
 class IpfsController {
     constructor(IpfsService) {
         this.addMetadataToIpfs = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -24,6 +30,38 @@ class IpfsController {
                 }
                 const hashString = yield this._IpfsService.uploadMetadata(req.body);
                 res.status(HttpStatus_1.HttpStatus.OK).json({ message: HttpStatus_1.HttpStatusMessage[HttpStatus_1.HttpStatus.OK], hash: hashString });
+            }
+            catch (error) {
+                console.log(error);
+                res.status(HttpStatus_1.HttpStatus.INTERNAL_SERVER_ERROR).json({ message: HttpStatus_1.HttpStatusMessage[HttpStatus_1.HttpStatus.INTERNAL_SERVER_ERROR] });
+            }
+        });
+        this.uploadImage = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const file = req.file;
+                if (!file) {
+                    res.status(HttpStatus_1.HttpStatus.BAD_REQUEST).json({ message: HttpStatus_1.HttpStatusMessage[HttpStatus_1.HttpStatus.BAD_REQUEST] });
+                    return;
+                }
+                cloudinary_1.v2.config({
+                    cloud_name: 'dp0f5mdrj',
+                    api_key: '749492575184253',
+                    api_secret: process.env.CLOUDINARY_SECRET // Click 'View API Keys' above to copy your API secret
+                });
+                console.log(file);
+                const result = yield (0, fs_1.writeFileSync)(path_1.default.join(__dirname, "../public", file.originalname), file.buffer);
+                const uploadResult = yield cloudinary_1.v2.uploader
+                    .upload(path_1.default.join(__dirname, "../public", file.originalname), {
+                    public_id: file.originalname,
+                })
+                    .catch((error) => {
+                    console.log(error);
+                });
+                if (!uploadResult) {
+                    res.status(HttpStatus_1.HttpStatus.INTERNAL_SERVER_ERROR).json({ message: HttpStatus_1.HttpStatusMessage[HttpStatus_1.HttpStatus.INTERNAL_SERVER_ERROR] });
+                    return;
+                }
+                res.status(HttpStatus_1.HttpStatus.OK).json({ message: HttpStatus_1.HttpStatusMessage[HttpStatus_1.HttpStatus.OK], url: uploadResult.secure_url });
             }
             catch (error) {
                 console.log(error);

@@ -11,8 +11,8 @@ services:
       - "4000:4000"
     command: npm run dev  # This will start the app in development mode using nodemon
     networks:
-      - gitwrapper_elk
+      - gittracker_elk
 
 networks:
-  gitwrapper_elk:
+  gittracker_elk:
     external: true
