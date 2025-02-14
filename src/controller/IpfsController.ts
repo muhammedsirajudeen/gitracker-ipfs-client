@@ -46,7 +46,7 @@ class IpfsController implements IIpfsController {
                 api_secret: process.env.CLOUDINARY_SECRET // Click 'View API Keys' above to copy your API secret
             });
             console.log(file)
-            const result=await writeFileSync(path.join(__dirname,"../public",file.originalname),file.buffer)
+            const result= writeFileSync(path.join(__dirname,"../public",file.originalname),file.buffer)
             const uploadResult = await cloudinary.uploader
             .upload(
                 path.join(__dirname,"../public",file.originalname), {
@@ -64,6 +64,40 @@ class IpfsController implements IIpfsController {
         } catch (error) {
             console.log(error)
             res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: HttpStatusMessage[HttpStatus.INTERNAL_SERVER_ERROR] })
+        }
+    }
+    uploadImages=async (req:Request,res:Response)=>{
+        try {
+            if(!req.files || req.files.length===0 ||!Array.isArray(req.files)){
+                res.status(HttpStatus.BAD_REQUEST).json({message:HttpStatusMessage[HttpStatus.BAD_REQUEST]})
+                return 
+            }
+            cloudinary.config({ 
+                cloud_name: 'dp0f5mdrj', 
+                api_key: '749492575184253', 
+                api_secret: process.env.CLOUDINARY_SECRET // Click 'View API Keys' above to copy your API secret
+            });
+            //test
+            for(let image of req.files){
+                writeFileSync(path.join(__dirname,"../public",image.originalname),image.buffer)
+            }
+            const uploadPromises=req.files.map((file)=>{
+                return new Promise((resolve,reject)=>{
+                    const upload=cloudinary.uploader.upload(path.join(__dirname,"../public",file.originalname),{
+                        public_id:file.originalname
+                    }).then((result)=>{
+                        resolve(result.secure_url)
+                    }).catch((error)=>{
+                        reject(error)
+                    })
+                })
+            })
+            console.log(uploadPromises)
+            const results=await Promise.all(uploadPromises)
+            res.status(HttpStatus.OK).json({message:HttpStatusMessage[HttpStatus.OK],urls:results??[]})
+        } catch (error) {
+            console.log(error)
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message:HttpStatusMessage[HttpStatus.INTERNAL_SERVER_ERROR]})
         }
     }
 }

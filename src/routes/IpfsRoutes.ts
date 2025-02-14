@@ -11,4 +11,6 @@ router.post('/ipfs' ,IpfsController.addMetadataToIpfs);
 //currently no security but dont forget to secure the endpoints
 router.post('/upload', upload.single('profileImage'),IpfsController.uploadImage)
 
+router.post('/attachments',upload.array('attachments'),IpfsController.uploadImages)
+
 export default router;

@@ -13,4 +13,5 @@ const upload = (0, multer_1.default)({ storage: storage });
 router.post('/ipfs', IpfsController_1.default.addMetadataToIpfs);
 //currently no security but dont forget to secure the endpoints
 router.post('/upload', upload.single('profileImage'), IpfsController_1.default.uploadImage);
+router.post('/attachments', upload.array('attachments'), IpfsController_1.default.uploadImages);
 exports.default = router;

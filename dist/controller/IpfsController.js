@@ -49,7 +49,7 @@ class IpfsController {
                     api_secret: process.env.CLOUDINARY_SECRET // Click 'View API Keys' above to copy your API secret
                 });
                 console.log(file);
-                const result = yield (0, fs_1.writeFileSync)(path_1.default.join(__dirname, "../public", file.originalname), file.buffer);
+                const result = (0, fs_1.writeFileSync)(path_1.default.join(__dirname, "../public", file.originalname), file.buffer);
                 const uploadResult = yield cloudinary_1.v2.uploader
                     .upload(path_1.default.join(__dirname, "../public", file.originalname), {
                     public_id: file.originalname,
@@ -62,6 +62,41 @@ class IpfsController {
                     return;
                 }
                 res.status(HttpStatus_1.HttpStatus.OK).json({ message: HttpStatus_1.HttpStatusMessage[HttpStatus_1.HttpStatus.OK], url: uploadResult.secure_url });
+            }
+            catch (error) {
+                console.log(error);
+                res.status(HttpStatus_1.HttpStatus.INTERNAL_SERVER_ERROR).json({ message: HttpStatus_1.HttpStatusMessage[HttpStatus_1.HttpStatus.INTERNAL_SERVER_ERROR] });
+            }
+        });
+        this.uploadImages = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (!req.files || req.files.length === 0 || !Array.isArray(req.files)) {
+                    res.status(HttpStatus_1.HttpStatus.BAD_REQUEST).json({ message: HttpStatus_1.HttpStatusMessage[HttpStatus_1.HttpStatus.BAD_REQUEST] });
+                    return;
+                }
+                cloudinary_1.v2.config({
+                    cloud_name: 'dp0f5mdrj',
+                    api_key: '749492575184253',
+                    api_secret: process.env.CLOUDINARY_SECRET // Click 'View API Keys' above to copy your API secret
+                });
+                //test
+                for (let image of req.files) {
+                    (0, fs_1.writeFileSync)(path_1.default.join(__dirname, "../public", image.originalname), image.buffer);
+                }
+                const uploadPromises = req.files.map((file) => {
+                    return new Promise((resolve, reject) => {
+                        const upload = cloudinary_1.v2.uploader.upload(path_1.default.join(__dirname, "../public", file.originalname), {
+                            public_id: file.originalname
+                        }).then((result) => {
+                            resolve(result.secure_url);
+                        }).catch((error) => {
+                            reject(error);
+                        });
+                    });
+                });
+                console.log(uploadPromises);
+                const results = yield Promise.all(uploadPromises);
+                res.status(HttpStatus_1.HttpStatus.OK).json({ message: HttpStatus_1.HttpStatusMessage[HttpStatus_1.HttpStatus.OK], urls: results !== null && results !== void 0 ? results : [] });
             }
             catch (error) {
                 console.log(error);
