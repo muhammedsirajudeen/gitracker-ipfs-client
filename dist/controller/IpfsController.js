@@ -12,8 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const HttpStatus_1 = require("@/lib/HttpStatus");
-const IpfsService_1 = __importDefault(require("@/service/IpfsService"));
+const HttpStatus_1 = require("../lib/HttpStatus");
+const IpfsService_1 = __importDefault(require("../service/IpfsService"));
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.configDotenv)();
 // src/controller/IpfsController.ts

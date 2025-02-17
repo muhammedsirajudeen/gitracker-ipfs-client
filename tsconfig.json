@@ -110,8 +110,9 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@/*":["src/*"]
-    }
+      "@/*":["./src/*"]
+    },
+    "moduleResolution": "node"
     
   }
 }

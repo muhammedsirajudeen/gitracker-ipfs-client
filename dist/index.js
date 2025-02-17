@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const IpfsRoutes_1 = __importDefault(require("@/routes/IpfsRoutes"));
-const dirRoutes_1 = __importDefault(require("@/routes/dirRoutes"));
+const IpfsRoutes_1 = __importDefault(require("./routes/IpfsRoutes"));
+const dirRoutes_1 = __importDefault(require("./routes/dirRoutes"));
 const cors_1 = __importDefault(require("cors"));
 const errorMiddleware_1 = require("./helper/errorMiddleware");
 const path_1 = __importDefault(require("path"));

@@ -9,7 +9,6 @@ services:
       - .:/usr/src/app:Z
     ports:
       - "4000:4000"
-    command: npm run dev  # This will start the app in development mode using nodemon
     networks:
       - gittracker_elk
 
