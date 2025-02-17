@@ -20,7 +20,7 @@ class IpfsService implements IIpfsService {
                 },
               });
               console.log("ipfs response",response.data.Hash)
-              return `https://gittracker.ddns.net/ipfs/${response.data.Hash}`
+              return `http://43.204.251.65:8080/ipfs/${response.data.Hash}`
         } catch (error) {
             console.error('Error uploading metadata to IPFS:', error);
             throw error;
