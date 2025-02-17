@@ -20,7 +20,7 @@ class IpfsService implements IIpfsService {
                 },
               });
               console.log("ipfs response",response.data.Hash)
-              return `https://gittracker/ipfs/${response.data.Hash}`
+              return `https://gittracker.ddns.net/ipfs/${response.data.Hash}`
         } catch (error) {
             console.error('Error uploading metadata to IPFS:', error);
             throw error;
