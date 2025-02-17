@@ -7,7 +7,7 @@ export interface IIpfsService {
 
 
 class IpfsService implements IIpfsService {
-    ipfsEndpoint = 'https://gittracker.ddns.net/api/v0/add'
+    ipfsEndpoint = 'http://43.204.251.65:5001/api/v0/add'
 
     async uploadMetadata(metadata: object): Promise<string> {
         try {
@@ -20,7 +20,7 @@ class IpfsService implements IIpfsService {
                 },
               });
               console.log("ipfs response",response.data.Hash)
-              return `https://gittracker.ddns.net/ipfs/${response.data.Hash}`
+              return `https://gittracker/ipfs/${response.data.Hash}`
         } catch (error) {
             console.error('Error uploading metadata to IPFS:', error);
             throw error;
